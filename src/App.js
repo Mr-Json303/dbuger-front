@@ -1,72 +1,89 @@
-import React, { useState} from 'react';
+import React from "react";
+import { BrowserRouter as Router, Link, Redirect, Route, Switch, useHistory } from "react-router-dom";
 
-import './App.css';
+// *Components
+import { useUserState, verifyToken, useUserDispatch } from "./context/UserContext";
+import Login from "./components/common/Login";
+import HomePage from "./components/pages/Home.Page";
+import IndexSwitch from "./Routes/Index.Switch";
 
-import Articulo from './componentes/Titulo';
+function App(props) {
 
-const data = [{
-  id:1,
-  nombre : 'PROD 1',
-  precio: 123,
-  url: 'https://miro.medium.com/max/650/1*5hUCDXcPEN7UXqGGmC-cIg.jpeg',
-  stock: 222
-},
-{
-  id:2,
-  nombre : 'PROD 2',
-  precio: 123,
-  url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF09NpP7Fb8hpoEyAZULKJp3u8Poi-BOqp39RyjlkF31xBcf52dJgZceY2MYLMG0U-lQI&usqp=CAU',
-  stock: 222
-},
-{
-  id:3,
-  nombre : 'PROD 3',
-  precio: 123,
-  url: 'https://d1ih8jugeo2m5m.cloudfront.net/2019/11/04-La-identidad-de-marca-en-la-fotografa-de-producto-1024x683.jpg',
-  stock: 222
-},
-{
-  id:4,
-  nombre : 'PROD 4',
-  precio: 123,
-  url: 'https://1.bp.blogspot.com/-5ETJCHwnQSI/Xq56kQJzp7I/AAAAAAAAiMg/ViyAq04RrF8XtY7Z6sSbSejPRYO79z99ACK4BGAsYHg/w480-h640/olena-sergienko-perfume-channel.jpg',
-  stock: 222
-},
-];
+  localStorage.removeItem('verifyProcess');
 
-function App() {
+  var userDispatch = useUserDispatch();
+  let history = useHistory();
+  const { email, token } = useUserState();
 
-  const [ contador, setContador ] = useState( 0 );
-  
-  const incrementar  = (id) =>{
-    console.log('Id producto: ', id);
-    setContador ( contador + 1);   
+  const userIsLogged = email !== undefined;
+
+  // console.log("Evaluando: \nIs The User Logged:", userIsLogged, email, token);
+  console.log(`Evaluando: \nIs the user logged: ${userIsLogged},\nThe email is: ${email},\nThe auth Token is: ${token}`);
+  console.log(`Verify process in Local Storage: ${localStorage.getItem('verifyProcess')}`);
+
+
+  if (!userIsLogged) {
+    if (token) {
+      console.log("EVALUAR TOKEN!");
+      const verifyProcess = localStorage.getItem('verifyProcess');
+      if (!verifyProcess) {
+        localStorage.setItem('verifyProcess', true);
+        verifyToken(userDispatch, token, history);
+      }
+
+    }
   }
 
   return (
+    <>
+      <Router>
+        <Switch>
 
-   <> 
+          <Route path="/app/:path?">
+            <>{
+              userIsLogged ? (
+                <IndexSwitch/>
 
-     <div className="App">
+              ) : (
+                <Redirect
+                  to={{ pathname: "/login" }}
+                />
+              )
+            }</>
+          </Route>
 
-         
-    CARRITO
+          <Route path='/register'>
+            <h1>Register page</h1>
+            <Link to='/'>{'<- Back To Homepage'}</Link>
+          </Route>
+          
+          <Route path='/login'>
+            <Login />
+            <Link to='/'> {'<- Back To Homepage'} </Link>
+          </Route>
 
-     <h2>{contador}</h2>
-     
-     </div>
+          <Route path='/prices'>
+            <h1>Price$$$ Page</h1>
+            <Link to='/'>{'<- Back To Homepage'}</Link>
+          </Route>
 
-     <div className="App">
+          <Route path='/solutions'>
+            <h1>Solutions Page</h1>
+            <Link to='/'>{'<- Back To Homepage'}</Link>
+          </Route>
 
-  { data.map( (item) =>
-    <Articulo onIncremento={incrementar} item={item} id={item.id} />
-  ) }
-        
+          <Route path='/features'>
+            <h1>Features Page</h1>
+            <Link to='/'>{'<- Back To Homepage'}</Link>
+          </Route>
 
-     </div>
+          <Route exact path="/">
+            <HomePage />
+          </Route>
 
-   </>
-
+        </Switch>
+      </Router>
+    </>
   );
 }
 
