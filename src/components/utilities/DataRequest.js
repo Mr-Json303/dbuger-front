@@ -77,3 +77,7 @@ export function ProjectListRequest(){
     // await AxiosMng.get()
 
 }
+
+export function SelectGetData(tableName, token, addtionalData){
+    
+}

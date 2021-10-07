@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import {
     Link,
-    useRouteMatch,
+    // useRouteMatch,
 } from 'react-router-dom';
 
 // *MUI Imports
@@ -21,12 +21,17 @@ import { ProjectCreatorRequest } from '../utilities/DataRequest';
 import { SquareLinkButton } from '../common/SquareButtons';
 import FormatUrl from '../utilities/formatUrl'
 
+import {
+    RFDialog
+} from '../test/ForwardRef'
 
 import { AddButton, ReloadButton } from '../common/SquareButtons';
 
 
 
 export function UserMainPage() {
+
+    const buttonRef = React.useRef(null);
 
     const {
         id: UserId,
@@ -43,11 +48,13 @@ export function UserMainPage() {
     useEffect(() => {
 
         ProjectCreatorRequest(UserId, token).then((data) => {
-            // console.log(data);
-            if (data.error) {
+            console.log(data);
+            if (data.error || data[0] === undefined) {
                 throw new Error('error', data)
             }
             setprojectList(data)
+            setisReloading(false)
+            setisError(false)
 
         }).catch(error => {
             setisError(true)
@@ -72,6 +79,12 @@ export function UserMainPage() {
                 {isError === true ? (
                     <Grid item>
                         an error has ocurred
+                        <Button
+                            onClick={() => setisReloading(true)}
+                            variant='contained'
+                        >
+                            Recargar
+                        </Button>
                     </Grid>
                 ) : (
                     projectList.map((project) =>
@@ -102,7 +115,21 @@ export function UserMainPage() {
 
             </Grid>
 
+            <Button component={Link} to='app/test/2' >Ir a testeo 2</Button>
+
             <h2>Projects you are a part of</h2>
+
+            <div>
+                <Button
+                    variant='contained'
+                    onClick={() => {
+                        buttonRef.current.handleClickOpen(UserId);
+                    }}
+                >
+                    Button From Parent
+                </Button>
+                <RFDialog ref={buttonRef} />
+            </div>
 
         </>
     )

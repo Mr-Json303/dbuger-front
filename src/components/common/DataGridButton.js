@@ -29,7 +29,6 @@ export function RowActionButtons({ cellValues }) {
     const [selectedValue, setSelectedValue] = useState();
 
     function handleOpen() {
-        console.log('Row info: ', cellValues);
         setSelectedValue(cellValues.row)
         setOpen(true);
     }

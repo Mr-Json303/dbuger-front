@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Link, Redirect, Route, Switch, useHistory } fr
 // *Components
 import { useUserState, verifyToken, useUserDispatch } from "./context/UserContext";
 import Login from "./components/common/Login";
+import Register from './components/forms/Register';
 import HomePage from "./components/pages/Home.Page";
 import IndexSwitch from "./Routes/Index.Switch";
 
@@ -40,6 +41,7 @@ function App(props) {
         <Switch>
 
           <Route path="/app/:path?">
+          {/* <Route exact strict path="/app/"> */}
             <>{
               userIsLogged ? (
                 <IndexSwitch/>
@@ -53,7 +55,7 @@ function App(props) {
           </Route>
 
           <Route path='/register'>
-            <h1>Register page</h1>
+            <Register/>
             <Link to='/'>{'<- Back To Homepage'}</Link>
           </Route>
           

@@ -19,17 +19,20 @@ export default function IndexSwitch(props) {
     <>
       <MainLayout {...props}>
 
-        {url === '/app' ? (
-          <div></div>
-        ) : (
-          <>
-            <Link to='/app' >{'<- Back To Home'}</Link>
-          </>)}
+      {url === '/app' ? (
+        <div></div>
+      ) : (
+        <>
+          <Link to='/app' >{'<- Back To Home'}</Link>
+          <br />
+          <br />
+          <br />
+        </>)}
 
         <Switch>
 
-          <Route exact path={[`${path}/project/undefined/`,`${path}/project/undefined/:area`]}>
-            <ProjectNotSelectedPage/>
+          <Route exact path={[`${path}/project/undefined/`, `${path}/project/undefined/:area`]}>
+            <ProjectNotSelectedPage />
           </Route>
 
           {/* Projecct switch pages */}
@@ -55,9 +58,11 @@ export default function IndexSwitch(props) {
 
         </Switch>
 
+      
 
 
       </MainLayout>
+
     </>
   )
 }
