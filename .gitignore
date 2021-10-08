@@ -25,4 +25,4 @@ yarn-error.log*
 #Hand inluded
 /.vscode
 
-/src/components/test/*
+/src/components/test/*.*
