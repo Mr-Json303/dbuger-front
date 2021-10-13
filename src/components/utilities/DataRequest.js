@@ -1,4 +1,3 @@
-import React from 'react';
 import AxiosMng from '../config/axios';
 
 import { useUserState,} from "../../context/UserContext";
@@ -80,4 +79,14 @@ export function ProjectListRequest(){
 
 export function SelectGetData(tableName, token, addtionalData){
     
+}
+
+//TODO implement request
+
+export function GenericReq(method, url, data, token){
+
+    let response = {};
+
+    return {}
+
 }
