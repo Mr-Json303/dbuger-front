@@ -12,7 +12,7 @@ import {
 import {
     Button,
     Grid,
-} from '@material-ui/core'
+} from '@mui/material'
 
 
 // *Local Imports
@@ -25,7 +25,7 @@ import {
     RFDialog
 } from '../test/ForwardRef'
 
-import { AddButton, ReloadButton } from '../common/SquareButtons';
+import { AddButton } from '../common/SquareButtons';
 
 
 
@@ -77,14 +77,14 @@ export function UserMainPage() {
             <Grid container alignItems='center' justifyContent='center' spacing={5}>
 
                 {isError === true ? (
-                    <Grid item>
-                        an error has ocurred
-                        <Button
+                    <Grid item> 
+                        There are no projects
+                        {/* <Button
                             onClick={() => setisReloading(true)}
                             variant='contained'
                         >
                             Recargar
-                        </Button>
+                        </Button> */}
                     </Grid>
                 ) : (
                     projectList.map((project) =>
@@ -106,8 +106,13 @@ export function UserMainPage() {
                 )
                 }
 
-                <Grid item >
-                    <AddButton>
+                <Grid
+                    item
+                    component={Link}
+                    to='app/project/new'>
+                    <AddButton
+
+                    >
                         New Project
                     </AddButton>
 

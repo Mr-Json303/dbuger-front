@@ -2,38 +2,36 @@ import React, {
   useState
 } from 'react';
 
+import { styled } from '@mui/material/styles';
+
 import {
   Link as RLink
 } from 'react-router-dom';
 
 import clsx from 'clsx';
 
-import { makeStyles } from '@material-ui/core/styles';
 import {
   CssBaseline,
   Drawer,
   Box,
   AppBar,
   Toolbar,
-  List,
   Typography,
   Divider,
   IconButton,
   Badge,
   Container,
-  Grid,
-  Paper,
   Link,
   Menu,
   MenuItem,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   Notifications as NotificationsIcon,
   Person as PersonIcon,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 
 import { MainListItems, SecondaryListItems } from './listItems';
@@ -41,7 +39,123 @@ import { CustomContexProvider } from '../../context/UserContext';
 import { useUserDispatch, logout } from '../../context/UserContext';
 import { useHistory } from 'react-router-dom';
 
-import { useLocation } from 'react-router-dom'
+const PREFIX = 'Layout';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  toolbar: `${PREFIX}-toolbar`,
+  toolbarIcon: `${PREFIX}-toolbarIcon`,
+  appBar: `${PREFIX}-appBar`,
+  appBarShift: `${PREFIX}-appBarShift`,
+  menuButton: `${PREFIX}-menuButton`,
+  menuButtonHidden: `${PREFIX}-menuButtonHidden`,
+  title: `${PREFIX}-title`,
+  drawerPaper: `${PREFIX}-drawerPaper`,
+  drawerPaperClose: `${PREFIX}-drawerPaperClose`,
+  appBarSpacer: `${PREFIX}-appBarSpacer`,
+  content: `${PREFIX}-content`,
+  container: `${PREFIX}-container`,
+  paper: `${PREFIX}-paper`,
+  fixedHeight: `${PREFIX}-fixedHeight`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.root}`]: {
+    display: 'flex',
+  },
+
+  [`& .${classes.toolbar}`]: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
+
+  [`& .${classes.toolbarIcon}`]: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+  },
+
+  [`& .${classes.appBar}`]: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+
+  [`& .${classes.appBarShift}`]: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+
+  [`& .${classes.menuButton}`]: {
+    marginRight: 36,
+  },
+
+  [`& .${classes.menuButtonHidden}`]: {
+    display: 'none',
+  },
+
+  [`& .${classes.title}`]: {
+    flexGrow: 1,
+  },
+
+  [`& .${classes.drawerPaper}`]: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+
+  [`& .${classes.drawerPaperClose}`]: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    width: theme.spacing(7),
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9),
+    },
+  },
+
+  [`& .${classes.appBarSpacer}`]: theme.mixins.toolbar,
+
+  [`& .${classes.content}`]: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+  },
+
+  [`& .${classes.container}`]: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+
+  [`& .${classes.paper}`]: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+
+  [`& .${classes.fixedHeight}`]: {
+    height: 240,
+  }
+}));
 
 function Copyright() {
   return (
@@ -58,95 +172,12 @@ function Copyright() {
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
-  },
-}));
-
 // ***** Main layout Function
 export function MainLayout({ props, children }) {
 
+  // *CustomContext hook
   const userDispatch = useUserDispatch();
   let history = useHistory();
-
-  const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-
 
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -167,7 +198,6 @@ export function MainLayout({ props, children }) {
 
   const handleClose = () => {
     setAnchorEl(null);
-    // console.log('dentro del handle close');
   };
   // *********end-user-menu-var-def*****
 
@@ -180,7 +210,7 @@ export function MainLayout({ props, children }) {
 
 
   return (
-    <>
+    <Root>
       <CustomContexProvider>
         <div className={classes.root}>
           <CssBaseline />
@@ -192,13 +222,13 @@ export function MainLayout({ props, children }) {
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
                 className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-              >
+                size="large">
                 <MenuIcon />
               </IconButton>
               <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                 Home
               </Typography>
-              <IconButton color="inherit">
+              <IconButton color="inherit" size="large">
                 <Badge badgeContent={4} color="secondary">
                   <NotificationsIcon />
                 </Badge>
@@ -206,10 +236,7 @@ export function MainLayout({ props, children }) {
 
 
               {/* User Menu */}
-              <IconButton
-                color="inherit"
-                onClick={handleClick}
-              >
+              <IconButton color="inherit" onClick={handleClick} size="large">
                 <PersonIcon />
               </IconButton>
 
@@ -238,7 +265,7 @@ export function MainLayout({ props, children }) {
             open={open}
           >
             <div className={classes.toolbarIcon}>
-              <IconButton onClick={handleDrawerClose}>
+              <IconButton onClick={handleDrawerClose} size="large">
                 <ChevronLeftIcon />
               </IconButton>
             </div>
@@ -252,9 +279,11 @@ export function MainLayout({ props, children }) {
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
-              {/* Children rendering */}
+              
 
-
+              {/*
+                //*Pages rendering via children prop
+              */}
               {children}
               
               <Box pt={4}>
@@ -264,7 +293,7 @@ export function MainLayout({ props, children }) {
           </main>
         </div>
       </CustomContexProvider>
-    </>
+    </Root>
   );
 }
 

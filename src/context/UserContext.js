@@ -1,6 +1,6 @@
 // *React Imports
 import React from "react";
-
+import axios from 'axios';
 // *Local Imports
 import AxiosManager from "../components/config/axios";
 
@@ -68,19 +68,15 @@ function useUserDispatch() {
 // **** codigo para procesar las acciones
 function loginUser(dispatch, token, email, id, history) {
 
-  // console.log("Token: ", token);
-  // console.log("Email: ", email);
-  // console.log("Id: ", id);
-
   dispatch({
     type: 'LOGIN',
     token: token,
     email: email,
     id: id,
   });
-
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   localStorage.setItem('token', token);
-  // localStorage.removeItem('verifyProcess');
+  
 
   history.push("/app");
 
@@ -94,32 +90,21 @@ async function verifyToken(dispatch, token, history) {
 
   await AxiosManager.post("/verifyToken", data).then((res) => {
 
-    // console.log("Respuesta de verifyToken: ", res.data.data);
-
-
-
     dispatch({
       type: 'LOGIN',
       token: res.data.data.token,
       email: res.data.data.email,
       id: res.data.data.id,
     });
-
-    // console.log("Estamos actualizados"); 
-
+    axios.defaults.headers.common.Authorization = `Bearer ${res.data.data.token}`;
     localStorage.setItem('token', token);
     localStorage.removeItem('verifyProcess');
-
-
     history.push("/app");
 
   });
-
-
 }
 
 function logout(dispatch, history) {
-  // console.log(dispatch, history);
   dispatch({
     type: 'LOGOUT',
     token: undefined,
@@ -127,6 +112,7 @@ function logout(dispatch, history) {
     id: 0,
   });
 
+  delete axios.defaults.headers.common.Authorization;
   localStorage.removeItem('token');
   localStorage.removeItem('verifyProcess');
   history.push("/login");
@@ -142,7 +128,6 @@ const SetCustomContext = React.createContext(null);
 export function useCustomContext() {
 
   var context = React.useContext(CustomContext);
-  // console.log('List Seleted context provider: ', context);
   if (context === undefined) {
     throw new Error("useListSelected must be used within a UserProvider");
   }
@@ -159,7 +144,6 @@ export function useSetCustomContext() {
 }
 
 function CustomContextReducer(state, {type, payload}) {
-  // console.log('payload',payload);
   switch (type) {
     case 'main': {
       return {...state, listSelected: payload}
@@ -178,6 +162,8 @@ function CustomContextReducer(state, {type, payload}) {
         listSelected: payload.listSelected
       }
     }
+
+    // TODO case 'logout': sets custom context to null
 
     default: {
       throw new Error(`Unhandled action type: ${type}`)

@@ -18,14 +18,8 @@ function App(props) {
 
   const userIsLogged = email !== undefined;
 
-  // console.log("Evaluando: \nIs The User Logged:", userIsLogged, email, token);
-  console.log(`Evaluando: \nIs the user logged: ${userIsLogged},\nThe email is: ${email},\nThe auth Token is: ${token}`);
-  console.log(`Verify process in Local Storage: ${localStorage.getItem('verifyProcess')}`);
-
-
   if (!userIsLogged) {
     if (token) {
-      console.log("EVALUAR TOKEN!");
       const verifyProcess = localStorage.getItem('verifyProcess');
       if (!verifyProcess) {
         localStorage.setItem('verifyProcess', true);
@@ -40,7 +34,7 @@ function App(props) {
       <Router>
         <Switch>
 
-          <Route path="/app/:path?">
+          <Route path="/app">
           {/* <Route exact strict path="/app/"> */}
             <>{
               userIsLogged ? (

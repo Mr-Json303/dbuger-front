@@ -2,7 +2,7 @@ import {
     useState
 } from 'react'
 
-import { TextField, Box, MenuItem } from "@material-ui/core";
+import { TextField, Box, MenuItem } from "@mui/material";
 
 export function SelectWithAdd(props) {
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, Switch, useRouteMatch, Link, Redirect } from "react-router-dom";
-import { Button } from '@material-ui/core'
+import { Route, Switch, useRouteMatch, Link } from "react-router-dom";
+import { Button } from '@mui/material'
 
 import IssueForm from '../components/forms/IssueForm';
 

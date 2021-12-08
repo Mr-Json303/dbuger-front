@@ -15,7 +15,7 @@ import {
   ListItemText,
   ListSubheader,
   ListItemIcon,
-} from '@material-ui/core'
+} from '@mui/material'
 
 // *MUI Icons
 import {
@@ -28,7 +28,7 @@ import {
   Assignment as AssignmentIcon,
   Mail as MailIcon,
   Timeline as TimelineIcon,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 
 import {
   useSetCustomContext,
@@ -46,7 +46,6 @@ export function MainListItems(props) {
 
   var Dispatch = useSetCustomContext();
   const state = useCustomContext();
-  // console.log('listselected at main: ', listSelected);
 
   const url = useLocation();
   const [selectedIndex, setselectedIndex] = useState();
@@ -67,7 +66,6 @@ export function MainListItems(props) {
     setisLoading(true);
 
     if (state.listSelected === 'main') {
-      // console.log('inside of if main', listSelected.value);
       setselectedIndex(url.pathname);
     } else {
       setselectedIndex(undefined);
@@ -76,11 +74,6 @@ export function MainListItems(props) {
     setisLoading(false);
 
   }, [state, url.pathname]);
-
-  // console.log('url.pathname: ', url.pathname);
-  // console.log('selectedIndex Main: ', selectedIndex);
-
-
 
   if (isLoading) {
 
@@ -159,8 +152,6 @@ export function SecondaryListItems(props) {
   const state = useCustomContext();
   const url = useLocation();
 
-
-
   let url_paths = {
     project_dashboard: `/app/project/${FormatUrl(state.currentProject.name)}`,
     issues_list: `/app/project/${FormatUrl(state.currentProject.name)}/issues`,
@@ -195,10 +186,8 @@ export function SecondaryListItems(props) {
     })
 
     if (state.listSelected === 'secondary') {
-      // console.log('inside of if secondary', listSelected.value);
-      // console.log('url.pathname: ', url.pathname);
       setselectedIndex(url.pathname);
-      
+
     } else {
       setselectedIndex(undefined);
     }
@@ -206,10 +195,6 @@ export function SecondaryListItems(props) {
     setisLoading(false);
 
   }, [state, url.pathname]);
-
-
-  // console.log('url.pathname: ', url.pathname);
-  // console.log('selectedIndex secondary: ', selectedIndex);
 
   if (isLoading) {
     return (
@@ -219,67 +204,79 @@ export function SecondaryListItems(props) {
     return (
       <List>
 
-        <ListSubheader inset>{`Project: ${state.currentProject.name === undefined? 'unselected' : state.currentProject.name}`}</ListSubheader>
+        <ListSubheader inset>{`Project: ${state.currentProject.name === undefined ? 'unselected' : state.currentProject.name}`}</ListSubheader>
 
-        <ListItem
-          selected={selectedIndex === pathList.project_dashboard}
-          onClick={(e) => handleListItemClick(e)}
-          button
-          component={Link}
-          to={pathList.project_dashboard}
-        >
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
+        {/*
+          //*selectfield
+        */}
 
-        <ListItem selected={selectedIndex === pathList.issues_list}
-          onClick={(e) => handleListItemClick(e)}
-          button
-          component={Link}
-          to={pathList.issues_list}
-        >
-          <ListItemIcon>
-            <TableChartIcon />
-          </ListItemIcon>
-          <ListItemText primary="Issues List" />
-        </ListItem>
+        {state.currentProject.id ?
 
-        <ListItem selected={selectedIndex === pathList.changelog}
-          onClick={(e) => handleListItemClick(e)}
-          button
-          component={Link}
-          to={pathList.changelog}
-        >
-          <ListItemIcon>
-            <RepeatIcon />
-          </ListItemIcon>
-          <ListItemText primary="ChangeLog" />
-        </ListItem>
+          <>
+            <ListItem
+              selected={selectedIndex === pathList.project_dashboard}
+              onClick={(e) => handleListItemClick(e)}
+              button
+              component={Link}
+              to={pathList.project_dashboard}
+            >
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
 
-        <ListItem selected={selectedIndex === pathList.roadmap}
-          onClick={(e) => handleListItemClick(e)}
-          button
-          component={Link}
-          to={pathList.roadmap}
-        >
-          <ListItemIcon>
-            <TimelineIcon />
-          </ListItemIcon>
-          <ListItemText primary="RoadMap" />
-        </ListItem>
+            <ListItem selected={selectedIndex === pathList.issues_list}
+              onClick={(e) => handleListItemClick(e)}
+              button
+              component={Link}
+              to={pathList.issues_list}
+            >
+              <ListItemIcon>
+                <TableChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Issues List" />
+            </ListItem>
 
-        <ListItem selected={selectedIndex === pathList.settings}
-          onClick={(e) => handleListItemClick(e)}
-          button
-          component={Link}
-          to={pathList.settings}>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary="{Projectname} Settings" />
-        </ListItem>
+            <ListItem selected={selectedIndex === pathList.changelog}
+              onClick={(e) => handleListItemClick(e)}
+              button
+              component={Link}
+              to={pathList.changelog}
+            >
+              <ListItemIcon>
+                <RepeatIcon />
+              </ListItemIcon>
+              <ListItemText primary="ChangeLog" />
+            </ListItem>
+
+            <ListItem selected={selectedIndex === pathList.roadmap}
+              onClick={(e) => handleListItemClick(e)}
+              button
+              component={Link}
+              to={pathList.roadmap}
+            >
+              <ListItemIcon>
+                <TimelineIcon />
+              </ListItemIcon>
+              <ListItemText primary="RoadMap" />
+            </ListItem>
+
+            <ListItem selected={selectedIndex === pathList.settings}
+              onClick={(e) => handleListItemClick(e)}
+              button
+              component={Link}
+              to={pathList.settings}>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="{Projectname} Settings" />
+            </ListItem>
+          </>
+
+          : <ListItem><ListItemText>Project Unselected</ListItemText></ListItem>
+
+        }
 
       </List>
     )

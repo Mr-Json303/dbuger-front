@@ -3,7 +3,8 @@ import React, {
     useEffect,
 } from 'react';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { styled } from '@mui/material/styles';
+
 import {
     Table,
     TableBody,
@@ -14,26 +15,31 @@ import {
     Paper,
     // Button,
     IconButton,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     Create as CreateIcon,
     Visibility as VisibilityIcon,
     Delete as DeleteIcon,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 
 import { ProjectGroupRequest as DTRequest } from '../utilities/DataRequest';
-// import { DataTableLoader } from "./DataTableLoader";
+const PREFIX = 'DataTable';
 
-const useStyles = makeStyles({
-    table: {
+const classes = {
+    table: `${PREFIX}-table`
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')({
+    [`& .${classes.table}`]: {
         minWidth: 650,
     },
 });
 
 
 export function ProjectGroupDataTable() {
-    const classes = useStyles();
+
 
     const [isLoading, setisLoading] = useState(true);
     const [projectName, setprojectName] = useState('')
@@ -43,38 +49,36 @@ export function ProjectGroupDataTable() {
     // *Consulta a la api
     useEffect(() => {
 
-            setisLoading(true)
+        setisLoading(true)
 
-            let _ProjectGroup = {}
-            DTRequest(2).then((data) => {
-
-                _ProjectGroup = data.Group
-                setprojectGroup(_ProjectGroup)
-                setprojectName(_ProjectGroup[0].Project.name)
-                console.log('Project group Data: ', _ProjectGroup);
-                setisLoading(false)
-                
-
-            });
+        let _ProjectGroup = {}
+        DTRequest(2).then((data) => {
+            console.log('data: ', data);
+            _ProjectGroup = data.Group
+            setprojectGroup(_ProjectGroup)
+            setprojectName(_ProjectGroup[0].Project.name)
+            setisLoading(false)
+        });
 
     }, [])
 
-    return (<>
-        <h1>{`Project ${projectName}:`}</h1>
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center">Name</TableCell>
-                        <TableCell align="center">Email</TableCell>
-                        <TableCell align="center">Role</TableCell>
-                        <TableCell align="center">Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {isLoading ? <h2>Cargando ...</h2> //<DataTableLoader/>
-                    :
-                        projectGroup.map((member) => 
+    return (
+        <Root>
+            <h1>{`Project ${projectName}:`}</h1>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">Name</TableCell>
+                            <TableCell align="center">Email</TableCell>
+                            <TableCell align="center">Role</TableCell>
+                            <TableCell align="center">Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {isLoading ? <h2>Cargando ...</h2> //<DataTableLoader/>
+                            :
+                            projectGroup.map((member) =>
                                 <TableRow key={member.UserId}>
                                     <TableCell component="th" scope="row">
                                         {member.User.name}
@@ -84,22 +88,23 @@ export function ProjectGroupDataTable() {
 
                                     <TableCell align="right">
                                         {/* {row.protein} */}
-                                        <IconButton>
+                                        <IconButton size="large">
                                             <VisibilityIcon />
                                         </IconButton>
-                                        <IconButton>
+                                        <IconButton size="large">
                                             <CreateIcon />
                                         </IconButton>
-                                        <IconButton>
+                                        <IconButton size="large">
                                             <DeleteIcon />
                                         </IconButton>
 
                                     </TableCell>
-                                </TableRow>   )
-                    }
-                </TableBody>
-            </Table>
-        </TableContainer>
-    </>);
+                                </TableRow>)
+                        }
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Root>
+    );
 
 }

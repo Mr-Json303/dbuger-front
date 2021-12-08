@@ -4,12 +4,11 @@ import { Link } from 'react-router-dom';
 
 import { 
     Button,
-    Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 
 import { 
     ArrowBackRounded as ArrowBackRoundedIcon,
-} from '@material-ui/icons'
+} from '@mui/icons-material'
 
 export function ProjectNotSelectedPage() {
 
